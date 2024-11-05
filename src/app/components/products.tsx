@@ -32,12 +32,13 @@ export default function Products() {
 
     return (
         <div>
-            <ul>
+            <ul aria-label="Product List">
                 {data.map((item: Item) => <li key={item.id}>{item.name}</li>)}
             </ul>
             <button
                 onClick={handleClick}
                 value="Spaghetti"
+                aria-label="Add Spaghetti"
             >
                 Add Spaghetti
             </button>
