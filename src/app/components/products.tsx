@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Products() {
     interface Item {
@@ -13,8 +13,12 @@ export default function Products() {
     const inputRef = useRef<HTMLInputElement>(null);
 
     function addItem() {
-        if (newItem === "") return;
-        const item: Item = { id: data.length + 1, name: newItem };
+        const cleanInput: string = sanitizeInput(newItem);
+        if (cleanInput === "") {
+            setNewItem("");
+            return;
+        }
+        const item: Item = { id: data.length + 1, name: cleanInput };
         const newData: Item[] = [...data, item];
         setData(newData);
         setNewItem("");
@@ -22,6 +26,11 @@ export default function Products() {
             inputRef.current.focus();
         }
     }
+
+    function sanitizeInput(input: string): string {
+        return input.replace(/<\/?[^>]+(>|$)/g, ""); 
+    }
+
     function deleteItem() {
         // delete last itm in data
         const newData: Item[] = [...data];
@@ -61,9 +70,9 @@ export default function Products() {
             <ul aria-label="Product List">
                 {data.map((item: Item) => <li key={item.id}>{item.name}</li>)}
             </ul>
-            <input 
-                type="text" 
-                aria-label="Enter New Item Field" 
+            <input
+                type="text"
+                aria-label="Enter New Item Field"
                 value={newItem}
                 onChange={handleItemChange}
                 onKeyDown={handleKeyDown}
